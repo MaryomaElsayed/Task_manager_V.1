@@ -2,13 +2,16 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
-const port = 30001;
+const mongooseSequence = require('mongoose-sequence')(mongoose); // Import mongoose-sequence
+const port = 3000;
+
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 // Serve static files from the "Front_end" directory
 app.use('/css', express.static(path.join(__dirname, 'Front_end', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'Front_end', 'js')));
-app.use('/img', express.static(path.join(__dirname, 'Front_end', 'img')));
-
+app.use('/img', express.static(path.join(__dirname, 'Front_end', 'images')));
 
 // Serve the HTML pages
 app.get('/', (req, res) => {
@@ -27,13 +30,177 @@ app.get('/dashboard.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'Front_end', 'pages', 'dashboard.html'));
 });
 
+// Connect to MongoDB
+const mongoURI = 'mongodb://localhost:27017/taskmanager';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+// Define Mongoose schemas and models
+
+// Define User Schema with auto-increment plugin
+const userSchema = new mongoose.Schema({
+    user_id: Number,
+    first_name: String,
+    last_name: String,
+    email: String,
+    password: String,
+    tasks: [{
+        name: String,
+        description: String,
+        day: String,
+        month: String,
+        year: String,
+        status: String,
+        added_date: Date,
+        updated_date: Date
+    }]
+});
+
+// Add auto-increment plugin
+userSchema.plugin(mongooseSequence, { inc_field: 'user_id' });
+
+// Create User Model
+const User = mongoose.model('User', userSchema);
+
+// Define Task Schema
+const taskSchema = new mongoose.Schema({
+    name: String,
+    description: String,
+    user_id: Number,
+    day: String,
+    month: String,
+    year: String,
+    status: String,
+    added_date: Date,
+    updated_date: Date
+});
+
+// Create Task Model
+const Task = mongoose.model('Task', taskSchema);
+
+// API Endpoints
+
+// POST /api/users - Create a new user
+app.post('/api/users', async (req, res) => {
+    const { first_name, last_name, email, password } = req.body;
+    if (!first_name || !last_name || !email || !password) {
+        return res.status(400).send('Missing required fields');
+    }
+    try {
+        const newUser = new User({ first_name, last_name, email, password, tasks: [] });
+        await newUser.save();
+        res.status(201).json(newUser);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// POST /api/tasks - Create a new task
+app.post('/api/tasks', async (req, res) => {
+    const { user_id, name, description, day, month, year, status, added_date, updated_date } = req.body;
+    if (!user_id || !name || !description || !day || !month || !year || !status || !added_date || !updated_date) {
+        return res.status(400).send('Missing required fields');
+    }
+    try {
+        const user = await User.findOne({ user_id });
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        const newTask = { name, description, day, month, year, status, added_date, updated_date };
+        user.tasks.push(newTask);
+        await user.save();
+        res.status(201).json(newTask);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// GET /api/tasks - Retrieve the collection of tasks
+app.get('/api/tasks', async (req, res) => {
+    try {
+        const tasks = await Task.find();
+        res.json(tasks);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// GET /tasks/:id - Retrieve a specific task by ID
+app.get('/api/tasks/:id', async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.id);
+        if (task) {
+            res.json(task);
+        } else {
+            res.status(404).send('Task not found');
+        }
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// GET /api/users - Retrieve the collection of users
+app.get('/api/users', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// GET /users/:id/tasks - Retrieve tasks associated with a specific user
+app.get('/api/users/:id/tasks', async (req, res) => {
+    try {
+        const userId = parseInt(req.params.id, 10);
+        const tasks = await Task.find({ user_id: userId });
+        res.json(tasks);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// PUT /api/tasks/:id - Update an existing task by ID
+app.put('/api/tasks/:id', async (req, res) => {
+    const { name, description, user_id, day, month, year, status, added_date, updated_date } = req.body;
+    try {
+        const task = await Task.findById(req.params.id);
+        if (task) {
+            task.name = name || task.name;
+            task.description = description || task.description;
+            task.user_id = user_id || task.user_id;
+            task.day = day || task.day;
+            task.month = month || task.month;
+            task.year = year || task.year;
+            task.status = status || task.status;
+            task.added_date = added_date || task.added_date;
+            task.updated_date = updated_date || task.updated_date;
+            await task.save();
+            res.json(task);
+        } else {
+            res.status(404).send('Task not found');
+        }
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// DELETE /api/tasks/:id - Delete a task by ID
+app.delete('/api/tasks/:id', async (req, res) => {
+    try {
+        const result = await Task.deleteOne({ _id: req.params.id });
+        if (result.deletedCount > 0) {
+            res.status(204).send();
+        } else {
+            res.status(404).send('Task not found');
+        }
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
-
-// mongoose.connect("DB LINK")
-// //This func will be excuted if the connecion was correct without errors
-// .then(() => {})
-// //This func will be excuted if an error occured , print error in console to
-// .catch((err) => {console.log(err)});

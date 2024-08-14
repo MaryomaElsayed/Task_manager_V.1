@@ -23,7 +23,26 @@
         class="left-column flex flex-column height-full justify-center items-center"
       >
         <h1 class="welcoming-title">Hello</h1>
-        <form class="form" autocomplete="off">
+        <form  id="add_User" class="form" autocomplete="off">
+
+           <label for="First_Name" class="label">First Name</label>
+          <input
+            type="text"
+            name="first_name"
+            id="First_Name"
+            class="input"
+            required
+          />
+
+           <label for="Last_Name" class="label">Last Name</label>
+          <input
+            type="text"
+            name="last_name"
+            id="Last_Name"
+            class="input"
+            required
+          />
+
           <label for="email" class="label">Email</label>
           <input type="email" name="email" id="email" class="input" required />
 
@@ -51,5 +70,8 @@
       <!-- right side -->
       <div class="right-column"></div>
     </div>
+      <script src="../js/main.js"></script>
+      <script src="../js/sign_up.js"></script>
+
   </body>
 </html>
