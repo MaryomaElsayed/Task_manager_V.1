@@ -11,7 +11,7 @@ app.use(express.json());
 // Serve static files from the "Front_end" directory
 app.use('/css', express.static(path.join(__dirname, 'Front_end', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'Front_end', 'js')));
-app.use('/img', express.static(path.join(__dirname, 'Front_end', 'images')));
+app.use('/img', express.static(path.join(__dirname, 'Front_end', 'img')));
 
 // Serve the HTML pages
 app.get('/', (req, res) => {
@@ -63,22 +63,6 @@ userSchema.plugin(mongooseSequence, { inc_field: 'user_id' });
 // Create User Model
 const User = mongoose.model('User', userSchema);
 
-// Define Task Schema
-const taskSchema = new mongoose.Schema({
-    name: String,
-    description: String,
-    user_id: Number,
-    day: String,
-    month: String,
-    year: String,
-    status: String,
-    added_date: Date,
-    updated_date: Date
-});
-
-// Create Task Model
-const Task = mongoose.model('Task', taskSchema);
-
 // API Endpoints
 
 // POST /api/users - Create a new user
@@ -116,46 +100,27 @@ app.post('/api/tasks', async (req, res) => {
     }
 });
 
-// GET /api/tasks - Retrieve the collection of tasks
-app.get('/api/tasks', async (req, res) => {
-    try {
-        const tasks = await Task.find();
-        res.json(tasks);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
-});
-
-// GET /tasks/:id - Retrieve a specific task by ID
-app.get('/api/tasks/:id', async (req, res) => {
-    try {
-        const task = await Task.findById(req.params.id);
-        if (task) {
-            res.json(task);
-        } else {
-            res.status(404).send('Task not found');
-        }
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
-});
-
-// GET /api/users - Retrieve the collection of users
-app.get('/api/users', async (req, res) => {
-    try {
-        const users = await User.find();
-        res.json(users);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
-});
-
-// GET /users/:id/tasks - Retrieve tasks associated with a specific user
+// GET /api/users/:id/tasks - Retrieve tasks associated with a specific user
 app.get('/api/users/:id/tasks', async (req, res) => {
     try {
-        const userId = parseInt(req.params.id, 10);
-        const tasks = await Task.find({ user_id: userId });
-        res.json(tasks);
+        const user = await User.findOne({ user_id: req.params.id });
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.json(user.tasks);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// GET /api/tasks/:taskId - Retrieve a specific task by ID
+app.get('/api/tasks/:taskId', async (req, res) => {
+    try {
+        const user = await User.findOne({ 'tasks._id': req.params.taskId }, { 'tasks.$': 1 });
+        if (!user) {
+            return res.status(404).send('Task not found');
+        }
+        res.json(user.tasks[0]);
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -163,24 +128,26 @@ app.get('/api/users/:id/tasks', async (req, res) => {
 
 // PUT /api/tasks/:id - Update an existing task by ID
 app.put('/api/tasks/:id', async (req, res) => {
-    const { name, description, user_id, day, month, year, status, added_date, updated_date } = req.body;
+    const { user_id, name, description, day, month, year, status, added_date, updated_date } = req.body;
     try {
-        const task = await Task.findById(req.params.id);
-        if (task) {
-            task.name = name || task.name;
-            task.description = description || task.description;
-            task.user_id = user_id || task.user_id;
-            task.day = day || task.day;
-            task.month = month || task.month;
-            task.year = year || task.year;
-            task.status = status || task.status;
-            task.added_date = added_date || task.added_date;
-            task.updated_date = updated_date || task.updated_date;
-            await task.save();
-            res.json(task);
-        } else {
-            res.status(404).send('Task not found');
+        const user = await User.findOne({ user_id });
+        if (!user) {
+            return res.status(404).send('User not found');
         }
+        const task = user.tasks.id(req.params.id);
+        if (!task) {
+            return res.status(404).send('Task not found');
+        }
+        task.name = name || task.name;
+        task.description = description || task.description;
+        task.day = day || task.day;
+        task.month = month || task.month;
+        task.year = year || task.year;
+        task.status = status || task.status;
+        task.added_date = added_date || task.added_date;
+        task.updated_date = updated_date || task.updated_date;
+        await user.save();
+        res.json(task);
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -189,12 +156,17 @@ app.put('/api/tasks/:id', async (req, res) => {
 // DELETE /api/tasks/:id - Delete a task by ID
 app.delete('/api/tasks/:id', async (req, res) => {
     try {
-        const result = await Task.deleteOne({ _id: req.params.id });
-        if (result.deletedCount > 0) {
-            res.status(204).send();
-        } else {
-            res.status(404).send('Task not found');
+        const user = await User.findOne({ user_id: req.body.user_id });
+        if (!user) {
+            return res.status(404).send('User not found');
         }
+        const task = user.tasks.id(req.params.id);
+        if (!task) {
+            return res.status(404).send('Task not found');
+        }
+        task.remove();
+        await user.save();
+        res.status(204).send();
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -204,3 +176,6 @@ app.delete('/api/tasks/:id', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+
+

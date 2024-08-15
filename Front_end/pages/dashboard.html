@@ -173,22 +173,8 @@
               ><span class="text">To do</span>
             </h2>
             <ul class="tasks-list pink">
-              <li class="task-item">
-                <button class="task-button">
-                  <div>
-                    <p class="task-name">Design UI</p>
-                    <p class="task-due-date">Due on January 7, 2020</p>
-                  </div>
-                  <!-- arrow -->
-                  <iconify-icon
-                    icon="material-symbols:arrow-back-ios-rounded"
-                    style="color: black"
-                    width="18"
-                    height="18"
-                    class="arrow-icon"
-                  ></iconify-icon>
-                </button>
-              </li>
+              <!-- the tasks will be heeeere in a listtttt -->
+    
             </ul>
              <!----------------------------------------------------------------------------->
           </div>
@@ -199,22 +185,8 @@
               ><span class="text">Doing</span>
             </h2>
             <ul class="tasks-list blue">
-              <li class="task-item">
-                <button class="task-button">
-                  <div>
-                    <p class="task-name">Design UI</p>
-                    <p class="task-due-date">Due on January 7, 2020</p>
-                  </div>
-                  <!-- arrow -->
-                  <iconify-icon
-                    icon="material-symbols:arrow-back-ios-rounded"
-                    style="color: black"
-                    width="18"
-                    height="18"
-                    class="arrow-icon"
-                  ></iconify-icon>
-                </button>
-              </li>
+              <!-- the tasks will be heeeere in a listtttt -->
+              
             </ul>
              <!--------------------------------------------------------------------------------->
           </div>
@@ -225,38 +197,8 @@
               ><span class="text">Done</span>
             </h2>
             <ul class="tasks-list green">
-              <li class="task-item">
-                <button class="task-button">
-                  <div>
-                    <p class="task-name">Design UI</p>
-                    <p class="task-due-date">Due on January 7, 2020</p>
-                  </div>
-                  <!-- arrow -->
-                  <iconify-icon
-                    icon="material-symbols:arrow-back-ios-rounded"
-                    style="color: black"
-                    width="18"
-                    height="18"
-                    class="arrow-icon"
-                  ></iconify-icon>
-                </button>
-              </li>
-              <li class="task-item">
-                <button class="task-button">
-                  <div>
-                    <p class="task-name">Design UI</p>
-                    <p class="task-due-date">Due on January 7, 2020</p>
-                  </div>
-                  <!-- arrow -->
-                  <iconify-icon
-                    icon="material-symbols:arrow-back-ios-rounded"
-                    style="color: black"
-                    width="18"
-                    height="18"
-                    class="arrow-icon"
-                  ></iconify-icon>
-                </button>
-              </li>
+              
+              <!-- the tasks will be heeeere in a listtttt -->
             </ul>
           </div>
         </div>
@@ -395,68 +337,80 @@
       </div>
     </div>
     <!---------------------------------------------------->
-    <!-- view task -->
+    <!-- view taskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk -->
     <div id="view-task-overlay" class="overlay view-task-overlay hide">
-      <div class="overlay-content green-background">
-        <!-- close button -->
-        <button
-          class="button circle-button blue-background flex justify-center items-center close-button"
-        >
-          <iconify-icon
-            icon="material-symbols:close-rounded"
-            style="color: black"
-            width="26"
-            height="26"
-          ></iconify-icon>
-        </button>
-        <h1 class="header no-margin">Name</h1>
-        <p class="value">some long task name</p>
-        <h1 class="header">Description</h1>
-        <p class="value">
-          some long task namesome long task namesome long task name
-        </p>
-        <div class="flex items-center">
-          <h1 class="header min-width">Due date</h1>
-          <p class="value">January 7, 2020</p>
-        </div>
-        <div class="flex items-center">
-          <h1 class="header min-width">Status</h1>
-          <p class="value status-value">
-            <span class="circle blue-background"></span><span>Doing</span>
-          </p>
-        </div>
-        <div class="control-buttons-container">
-          <!-- edit button -->
-          <button
-            class="button circle-button pink-background flex justify-center items-center"
-          >
-            <iconify-icon
-              icon="material-symbols:edit-rounded"
-              style="color: black"
-              width="24"
-              height="24"
-            ></iconify-icon>
-          </button>
-          <!-- delete button -->
-          <button
-            id="delete-task-cta"
-            class="button circle-button pink-background flex justify-center items-center"
-          >
-            <iconify-icon
-              icon="ic:round-delete"
-              style="color: black"
-              width="24"
-              height="24"
-            ></iconify-icon>
-          </button>
-        </div>
-      </div>
+  <div class="overlay-content green-background">
+    <!-- close button -->
+    <button class="button circle-button blue-background flex justify-center items-center close-button">
+      <iconify-icon
+        icon="material-symbols:close-rounded"
+        style="color: black"
+        width="26"
+        height="26"
+      ></iconify-icon>
+    </button>
+    
+
+    <!-- Task Name -->
+    <h1 class="header no-margin">Name</h1>
+    <p class="value" id="task_name"></p>
+
+    <!-- Task Description -->
+
+    <h1 class="header">Description</h1>
+    <p class="value" id="task_description">
+     
+    </p>
+
+    <!-- Task Due Date -->
+    <div class="flex items-center">
+      <h1 class="header min-width">Due date</h1>
+      <p class="value" id="task_due_date"></p>
     </div>
+
+    <!-- Task Status -->
+    <div class="flex items-center">
+      <h1 class="header min-width">Status</h1>
+      <p class="value status-value" id="task_status">
+        <span class="circle blue-background"></span><span>Doing</span>
+      </p>
+    </div>
+
+
+    <!-- Control Buttons -->
+    <div class="control-buttons-container">
+      <!-- edit button -->
+      <button
+        class="button circle-button pink-background flex justify-center items-center"
+      >
+        <iconify-icon
+          icon="material-symbols:edit-rounded"
+          style="color: black"
+          width="24"
+          height="24"
+        ></iconify-icon>
+      </button>
+
+      <!-- delete button -->
+      <button
+        id="delete-task-cta"
+        class="button circle-button pink-background flex justify-center items-center"
+      >
+        <iconify-icon
+          icon="ic:round-delete"
+          style="color: black"
+          width="24"
+          height="24"
+        ></iconify-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
     <!-- import IconifyIcon web component -->
     <script src="https://code.iconify.design/iconify-icon/1.0.5/iconify-icon.min.js"></script>
     <!-- js -->
     <script src="../js/main.js"></script>
     <script src="../js/node1.js"></script>
-    <script src="../js/DBV_2.js"></script>
   </body>
 </html>
