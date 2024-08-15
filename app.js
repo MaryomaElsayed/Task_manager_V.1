@@ -30,7 +30,14 @@ app.get('/dashboard.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'Front_end', 'pages', 'dashboard.html'));
 });
 
-// Connect to MongoDB
+// connect to ATLAS
+// mongoose.connect('mongodb+srv://maryamelsayd1:eskhsL9qU2oPpksf@cluster0.xgcpc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+
+
+// // Connect to MongoDB localyyyyyy
 const mongoURI = 'mongodb://localhost:27017/taskmanager';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
@@ -107,7 +114,7 @@ app.get('/api/users/:id/tasks', async (req, res) => {
         if (!user) {
             return res.status(404).send('User not found');
         }
-        res.json(user.tasks);
+        res.json(user.tasks);// Return tasks with thier MongoDb _d
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -153,24 +160,35 @@ app.put('/api/tasks/:id', async (req, res) => {
     }
 });
 
-// DELETE /api/tasks/:id - Delete a task by ID
+
 app.delete('/api/tasks/:id', async (req, res) => {
     try {
-        const user = await User.findOne({ user_id: req.body.user_id });
+        // Find the user that contains the task
+        const user = await User.findOne({ 'tasks._id': req.params.id });
         if (!user) {
             return res.status(404).send('User not found');
         }
-        const task = user.tasks.id(req.params.id);
-        if (!task) {
+
+        // Find the index of the task in the user's tasks array
+        const taskIndex = user.tasks.findIndex(task => task._id.toString() === req.params.id);
+        if (taskIndex === -1) {
             return res.status(404).send('Task not found');
         }
-        task.remove();
+
+        // Remove the task from the array
+        user.tasks.splice(taskIndex, 1);
+
+        // Save the updated user document
         await user.save();
+
+        // Respond with no content
         res.status(204).send();
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
+
+
 
 // Start the server
 app.listen(port, () => {
