@@ -1,0 +1,16 @@
+
+
+
+.icon-button {
+  width: 50px;  /* Adjust size as needed */
+  height: 50px;
+  border-radius: 50%;
+  background-size: 33px 33px;
+  border: 2px solid black; /* Black border with 2px width */
+  cursor: pointer;
+  background-image: url("../img/send.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #ff9c9c;
+}
+

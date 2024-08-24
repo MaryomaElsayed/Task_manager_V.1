@@ -17,4 +17,3 @@ document.addEventListener("DOMContentLoaded", user_name);
 
 
 
-// retrive the data from mongodb database not from local storaaaaage

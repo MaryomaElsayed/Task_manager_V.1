@@ -1,3 +1,5 @@
+
+//WORKIIIIIIIIINNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNGGGGGGGGGGGGGGGGGGGGG
 // Elements
 const radioViewOptions = document.querySelectorAll("input[name='view-option']");
 const listView = document.getElementById("list-view");
@@ -18,10 +20,12 @@ const doingList = document.querySelector(".tasks-list.blue");
 const doneList = document.querySelector(".tasks-list.green");
 
 class Task {
-    constructor(name, description, dueDate, status) {
+    constructor(name, description, day, month, year, status) {
         this.name = name;
         this.description = description;
-        this.dueDate = dueDate;
+        this.day = day;
+        this.month = month;
+        this.year = year;
         this.status = status || "To do"; // Default to "To do" if no status is provided
     }
 
@@ -37,17 +41,16 @@ class Task {
         this.status = "Done";
     }
 
-    getDetails() {
-        return `${this.name} - ${this.description} (Due: ${this.dueDate}, Status: ${this.status})`;
-    }
-
     toObject() {
         return {
-            _id: this._id, // Ensure the _id is included
             name: this.name,
             description: this.description,
-            dueDate: this.dueDate,
-            status: this.status
+            day: this.day,
+            month: this.month,
+            year: this.year,
+            status: this.status,
+            added_date: new Date(),
+            updated_date: new Date()
         };
     }
 }
@@ -55,7 +58,7 @@ class Task {
 // The current active overlay
 let activeOverlay = null;
 
-// IMPORTAAAAAAAAAAAAAAN FUNCTION **********
+// Fetch and render tasks
 async function fetchTasksAndRender() {
     const userId = localStorage.getItem("user_id");
 
@@ -79,10 +82,9 @@ async function fetchTasksAndRender() {
     }
 }
 
+// Event Listeners
 
-//** Event Listeners **//
-
-// Radio buttons for view option
+// View options radio buttons
 radioViewOptions.forEach((radioButton) => {
   radioButton.addEventListener("change", (event) => {
     const viewOption = event.target.value;
@@ -96,14 +98,14 @@ radioViewOptions.forEach((radioButton) => {
   });
 });
 
-// Add task
+// Add task button
 addTaskCTA.addEventListener("click", () => {
   setTaskOverlay.classList.remove("hide");
   activeOverlay = setTaskOverlay;
   document.body.classList.add("overflow-hidden");
 });
 
-// Close buttons inside overlays
+// Close buttons
 closeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     if (activeOverlay) {
@@ -114,12 +116,12 @@ closeButtons.forEach((button) => {
   });
 });
 
-// Open status dropdown
+// Status dropdown
 statusSelect.addEventListener("click", () => {
   statusDropdown.classList.toggle("hide");
 });
 
-// Update status when a status radio is selected
+// Status selection
 statusRadios.forEach((radio) => {
   radio.addEventListener("change", (event) => {
     const selectedStatus = event.target.value;
@@ -128,7 +130,7 @@ statusRadios.forEach((radio) => {
   });
 });
 
-
+// Add Task Form
 addTaskForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -187,37 +189,27 @@ document.addEventListener("click", (event) => {
   const taskItem = event.target.closest(".task-item");
 
   if (taskItem) {
-    // Extract task details from the clicked task item
+    const taskId = taskItem.getAttribute('data-task-id');
     const taskName = taskItem.querySelector(".task-name").textContent;
-    const taskDueDate = taskItem.querySelector(".task-due-date").textContent;
+    //const taskDueDate = taskItem.querySelector(".task-due-date").textContent;
     const taskStatus = taskItem.closest(".tasks-list").classList.contains("pink") ? "To do" :
                        taskItem.closest(".tasks-list").classList.contains("blue") ? "Doing" : "Done";
+    const taskDescription = taskItem.getAttribute("data-description");
 
-    // Get the task description from the actual task data
-    const taskDescription = taskItem.getAttribute("data-description"); // Assuming you store the description in a data attribute
-
-    // Log the task description to check the data
-    console.log(taskDescription);
-
-    // Update the overlay content
     viewTaskOverlay.querySelector("#task_name").textContent = taskName;
     viewTaskOverlay.querySelector("#task_description").textContent = taskDescription;
-    viewTaskOverlay.querySelector("#task_due_date").textContent = taskDueDate;
+    //viewTaskOverlay.querySelector("#task_due_date").textContent = taskDueDate;
     viewTaskOverlay.querySelector("#task_status span:last-child").textContent = taskStatus;
 
-    // Store the task ID in the overlay
-    const taskId = taskItem.getAttribute('data-task-id');
     viewTaskOverlay.setAttribute("data-task-id", taskId);
 
-    // Show the overlay
     viewTaskOverlay.classList.remove("hide");
     activeOverlay = viewTaskOverlay;
     document.body.classList.add("overflow-hidden");
   }
 });
 
-
-
+// Delete Task
 deleteTaskCTA.addEventListener("click", async () => {
     if (activeOverlay) {
         const taskId = activeOverlay.getAttribute("data-task-id");
@@ -238,7 +230,6 @@ deleteTaskCTA.addEventListener("click", async () => {
             });
 
             if (response.ok) {
-                // Task deleted successfully, now re-fetch tasks
                 await fetchTasksAndRender();
 
                 activeOverlay.classList.add("hide");
@@ -258,14 +249,12 @@ deleteTaskCTA.addEventListener("click", async () => {
     }
 });
 
-
-
-// Function to display tasks in the UI
+// Display tasks in the UI
 function displayTask(task) {
     const taskItem = document.createElement('li');
     taskItem.className = 'task-item';
     taskItem.setAttribute('data-description', task.description);
-    taskItem.setAttribute('data-task-id', task._id); // Ensure the task ID is set here
+    taskItem.setAttribute('data-task-id', task._id);
 
     const taskButton = document.createElement('button');
     taskButton.className = 'task-button';
@@ -295,7 +284,6 @@ function displayTask(task) {
     taskList.appendChild(taskItem);
 }
 
-
 // Initialize the task manager by fetching tasks
 (async () => {
   const userId = localStorage.getItem("user_id");
@@ -315,4 +303,7 @@ function displayTask(task) {
     console.error('Error:', error);
   }
 })();
+
+
+
 
