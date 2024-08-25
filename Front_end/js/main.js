@@ -1,6 +1,7 @@
-
+// FINALLLLLLL CODEEEEEEEEEEEE
 //WORKIIIIIIIIINNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNGGGGGGGGGGGGGGGGGGGGG
 // Elements
+// Define constants for DOM elements
 const radioViewOptions = document.querySelectorAll("input[name='view-option']");
 const listView = document.getElementById("list-view");
 const boardView = document.getElementById("board-view");
@@ -15,10 +16,17 @@ const viewTaskOverlay = document.getElementById("view-task-overlay");
 const deleteTaskCTA = document.getElementById("delete-task-cta");
 const notification = document.getElementById("notification");
 
+const editStatusSelect = document.getElementById('edit-status-select');
+const editStatusDropdown = document.getElementById('edit-status-dropdown');
+const editStatusInput = document.getElementById('edit-status-input');
+const editStatusDisplay = document.getElementById('edit-status-display');
+const editStatusRadios = document.querySelectorAll('#edit-status-dropdown input[type="radio"]');
+
 const todoList = document.querySelector(".tasks-list.pink");
 const doingList = document.querySelector(".tasks-list.blue");
 const doneList = document.querySelector(".tasks-list.green");
 
+// Class definition for Task
 class Task {
     constructor(name, description, day, month, year, status) {
         this.name = name;
@@ -84,6 +92,34 @@ async function fetchTasksAndRender() {
 
 // Event Listeners
 
+// Toggle the visibility of the status dropdown when the status select is clicked
+editStatusSelect.addEventListener('click', function () {
+    editStatusDropdown.classList.toggle('hide');
+});
+
+// Update the status display and hidden input when a radio button is selected
+editStatusRadios.forEach(function (radio) {
+    radio.addEventListener('change', function () {
+        if (radio.checked) {
+            const selectedStatus = radio.value;
+            if (editStatusInput && editStatusDisplay) {
+                editStatusInput.value = selectedStatus;
+                editStatusDisplay.textContent = selectedStatus;
+                editStatusDropdown.classList.add('hide');
+            } else {
+                console.error('Edit status input or display elements are missing');
+            }
+        }
+    });
+});
+
+// Close the dropdown when clicking outside of it
+document.addEventListener('click', function (event) {
+    if (!editStatusSelect.contains(event.target) && !editStatusDropdown.contains(event.target)) {
+        editStatusDropdown.classList.add('hide');
+    }
+});
+
 // View options radio buttons
 radioViewOptions.forEach((radioButton) => {
   radioButton.addEventListener("change", (event) => {
@@ -109,6 +145,7 @@ addTaskCTA.addEventListener("click", () => {
 closeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     if (activeOverlay) {
+      event.preventDefault(); // Prevent default action if needed IMPORTAAAAAAAAAAAANT
       activeOverlay.classList.add("hide");
       activeOverlay = null;
       document.body.classList.remove("overflow-hidden");
@@ -125,8 +162,12 @@ statusSelect.addEventListener("click", () => {
 statusRadios.forEach((radio) => {
   radio.addEventListener("change", (event) => {
     const selectedStatus = event.target.value;
-    statusSelect.querySelector("span").textContent = selectedStatus;
-    statusDropdown.classList.add("hide");
+    if (statusSelect && statusSelect.querySelector("span")) {
+        statusSelect.querySelector("span").textContent = selectedStatus;
+        statusDropdown.classList.add("hide");
+    } else {
+        console.error('Status select element or its span is missing');
+    }
   });
 });
 
@@ -184,35 +225,162 @@ addTaskForm.addEventListener("submit", async (event) => {
     }, 3000);
 });
 
-// Click a task to view details
+
+// Function to send PUT request to update task details
+async function updateTask(taskId) {
+    const userId = localStorage.getItem("user_id");
+
+    // Gather all field values
+    const editTaskName = document.getElementById('edit-task-name').value;
+    const editTaskDescription = document.getElementById('edit-task-description').value;
+    const editDueDateDay = document.getElementById('edit-due-date-day').value;
+    const editDueDateMonth = document.getElementById('edit-due-date-month').value;
+    const editDueDateYear = document.getElementById('edit-due-date-year').value;
+    
+    // Capture status using the hidden input field (updated to match previous working code)
+    const editStatusInput = document.getElementById('edit-status-input').value;
+
+    // Prepare the data object
+    const taskData = {
+        name: editTaskName,
+        description: editTaskDescription,
+        day: editDueDateDay,
+        month: editDueDateMonth,
+        year: editDueDateYear,
+        status: editStatusInput // Use the hidden input value
+    };
+
+    try {
+        const response = await fetch(`/api/users/${userId}/tasks/${taskId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(taskData)
+        });
+
+        if (response.ok) {
+        	await fetchTasksAndRender();
+
+            console.log("Task updated successfully.");
+            closeEditOverlay();
+        } else {
+            console.error("Failed to update task:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error updating task:", error);
+    }
+}
+
+
+// Function to close the edit overlay
+function closeEditOverlay() {
+    const viewTaskOverlay = document.getElementById('view-task-overlay');
+    if (viewTaskOverlay) {
+        viewTaskOverlay.classList.add('hide');
+        document.body.classList.remove('overflow-hidden');
+    } else {
+        console.error('View task overlay element is missing');
+    }
+}
+
+
+
+// Function to open the task overlay and populate it with task data
+function openTaskOverlay(taskId) {
+    const userId = localStorage.getItem("user_id");
+
+    fetch(`/api/users/${userId}/tasks/${taskId}`)
+        .then(response => response.json())
+        .then(task => {
+            const editTaskName = document.getElementById('edit-task-name');
+            const editTaskDescription = document.getElementById('edit-task-description');
+            const editDueDateDay = document.getElementById('edit-due-date-day');
+            const editDueDateMonth = document.getElementById('edit-due-date-month');
+            const editDueDateYear = document.getElementById('edit-due-date-year');
+
+            if (editTaskName && editTaskDescription && editDueDateDay && editDueDateMonth && editDueDateYear) {
+                editTaskName.value = task.name || '';
+                editTaskDescription.value = task.description || '';
+                editDueDateDay.value = task.day || '';
+                editDueDateMonth.value = task.month || '';
+                editDueDateYear.value = task.year || '';
+            } else {
+                console.error('Edit task overlay input elements are missing');
+            }
+
+            const editStatusRadios = document.querySelectorAll('input[name="status-option"]');
+            const editStatusDisplay = document.getElementById('edit-status-display');
+            const editStatusInput = document.getElementById('edit-status-input');
+
+            editStatusRadios.forEach(function (radio) {
+                if (radio.value === task.status) {
+                    radio.checked = true;
+                    editStatusDisplay.textContent = task.status;
+                    editStatusInput.value = task.status; // Set hidden input to the current status
+                }
+            });
+
+            const viewTaskOverlay = document.getElementById('view-task-overlay');
+            if (viewTaskOverlay) {
+                viewTaskOverlay.setAttribute('data-task-id', taskId);
+                viewTaskOverlay.classList.remove('hide');
+                activeOverlay = viewTaskOverlay;
+                document.body.classList.add('overflow-hidden');
+            } else {
+                console.error('View task overlay element is missing');
+            }
+        })
+        .catch(error => console.error('Error fetching task:', error));
+}
+
+// Event listener for clicking a task item
 document.addEventListener("click", (event) => {
-  const taskItem = event.target.closest(".task-item");
+    const taskItem = event.target.closest(".task-item");
 
-  if (taskItem) {
-    const taskId = taskItem.getAttribute('data-task-id');
-    const taskName = taskItem.querySelector(".task-name").textContent;
-    //const taskDueDate = taskItem.querySelector(".task-due-date").textContent;
-    const taskStatus = taskItem.closest(".tasks-list").classList.contains("pink") ? "To do" :
-                       taskItem.closest(".tasks-list").classList.contains("blue") ? "Doing" : "Done";
-    const taskDescription = taskItem.getAttribute("data-description");
-
-    viewTaskOverlay.querySelector("#task_name").textContent = taskName;
-    viewTaskOverlay.querySelector("#task_description").textContent = taskDescription;
-    //viewTaskOverlay.querySelector("#task_due_date").textContent = taskDueDate;
-    viewTaskOverlay.querySelector("#task_status span:last-child").textContent = taskStatus;
-
-    viewTaskOverlay.setAttribute("data-task-id", taskId);
-
-    viewTaskOverlay.classList.remove("hide");
-    activeOverlay = viewTaskOverlay;
-    document.body.classList.add("overflow-hidden");
-  }
+    if (taskItem) {
+        const taskId = taskItem.getAttribute('data-task-id');
+        if (taskId) {
+            openTaskOverlay(taskId); // Open overlay and populate it
+            console.log("Clicked Task ID:", taskId); // Log the clicked task ID to the console
+        } else {
+            console.error("Task ID is missing from the clicked task item.");
+        }
+    }
 });
 
+// // Event listener for the "Edit" button
+// document.getElementById("edit_button").addEventListener("click", (event) => {
+//     const taskId = document.getElementById('view-task-overlay').getAttribute('data-task-id');
+//     if (taskId) {
+//         updateTask(taskId); // Send PUT request to update task
+//     } else {
+//         console.error("Task ID is missing, cannot update task.");
+//     }
+// });
+
+
+// Event listener for the "Edit" button
+document.getElementById("edit_button").addEventListener("click", (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
+    const taskId = document.getElementById('view-task-overlay').getAttribute('data-task-id');
+    if (taskId) {
+        updateTask(taskId); // Send PUT request to update task
+    } else {
+        console.error("Task ID is missing, cannot update task.");
+    }
+});
+
+
+
 // Delete Task
-deleteTaskCTA.addEventListener("click", async () => {
+deleteTaskCTA.addEventListener("click", async (event) => {
+    event.preventDefault(); // Prevent default action to avoid any unintended behavior
+
     if (activeOverlay) {
         const taskId = activeOverlay.getAttribute("data-task-id");
+
+        console.log("Attempting to delete Task ID:", taskId); // Log task ID for debugging
 
         if (!taskId) {
             console.error("Task ID is missing!");
@@ -248,6 +416,10 @@ deleteTaskCTA.addEventListener("click", async () => {
         }
     }
 });
+
+
+
+
 
 // Display tasks in the UI
 function displayTask(task) {

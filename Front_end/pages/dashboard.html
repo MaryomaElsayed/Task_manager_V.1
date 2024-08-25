@@ -19,7 +19,7 @@
     <!-- main css -->
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/dashboard.css" />
-    <link rel="stylesheet" href="../css/Edit_task.css" />
+    
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
@@ -34,7 +34,7 @@
           width="24"
           height="24"
         ></iconify-icon>
-        <p>The task was deleted</p>
+        <p>The task was Added</p>
       </div>
       <!-- header -->
       <div class="max-width-container">
@@ -96,26 +96,7 @@
             </label>
           </div>
           <!-- 333333333333333333333333333333333333333333333333333 -->
-          <div class="radio-container">
-            <input
-              type="radio"
-              id="list"
-              name="view-option"
-              value="list"
-              class="radio-input"
-              checked
-            />
-            <label for="list" class="radio-label">
-              <!-- list-bulleted -->
-              <iconify-icon
-                icon="material-symbols:format-list-bulleted-rounded"
-                style="color: black"
-                width="24"
-                height="24"
-              ></iconify-icon>
-              <span>Timer</span>
-            </label>
-          </div>
+          
           <!-- 4444444444444444444444444444444444444444444444444 -->
         </div>
       </div>
@@ -201,7 +182,7 @@
             required
           />
           <!-- Hidden input for the name fielddddddddddddddddd -->
-          <input type="hidden" id="name-hidden-input">
+          <!--<input type="hidden" id="name-hidden-input">-->
 
           <label for="description" class="label">Description</label>
           <textarea
@@ -323,6 +304,7 @@
     <!-- view taskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk -->
     <div id="view-task-overlay" class="overlay view-task-overlay hide">
   <div class="overlay-content green-background">
+    <form id="edit-task-form">
     <!-- close button -->
     <button class="button circle-button blue-background flex justify-center items-center close-button">
       <iconify-icon
@@ -337,7 +319,7 @@
     <!-- Task Name -->
     <h1 class="header no-margin">Name</h1>
     <!--<p class="value" id="task_name"></p>-->
-    <input type="text" name="name" id="task_name" class="input white-background">
+    <input type="text" name="name" id="edit-task-name" class="input white-background" placeholder="Task Name">
 
     <!-- Task Description -->
 
@@ -345,30 +327,89 @@
    <!--  <p class="value" id="task_description">
      
     </p> -->
-     <textarea id="task_description" class="input white-background"></textarea>
+     <textarea id="edit-task-description" class="input white-background"  placeholder="Task Description"></textarea>
 
     <div id="task_due_date" class="divided-inputs-container">
         <div>
-            <label for="due-date-day" class="secondary-label">Day</label>
-            <input type="number" id="task-due-date-day" class="input white-background" required min="1" max="31">
+            <label for="due-date-day" class="secondary-label" >Day</label>
+            <input type="number" id="edit-due-date-day" class="input white-background"  placeholder="Day" required min="1" max="31">
         </div>
         <div>
             <label for="due-date-month" class="secondary-label">Month</label>
-            <input type="number" id="task-due-date-month" class="input white-background" required min="1" max="12">
+            <input type="number" id="edit-due-date-month" class="input white-background" placeholder="Month" required min="1" max="12">
         </div>
         <div>
             <label for="due-date-year" class="secondary-label">Year</label>
-            <input type="number" id="task-due-date-year" class="input white-background" required min="1900" max="2100">
+            <input type="number" id="edit-due-date-year" class="input white-background" placeholder="Year" required min="1900" max="2100">
         </div>
     </div>
 
+
     <!-- Task Status -->
-    <div class="flex items-center">
+    <!-- <div class="flex items-center">
       <h1 class="header min-width">Status</h1>
       <p class="value status-value" id="task_status">
         <span class="circle blue-background"></span><span>Doing</span>
       </p>
+    </div> -->
+     <!-- Status Selection -->
+    <label class="secondary-label">Status</label>
+    <div
+      id="edit-status-select"
+      class="status-select white-background flex items-center justify-between cursor-pointer"
+    >
+      <input type="hidden" id="edit-status-input" value="To do" />
+      <span id="edit-status-display">To do</span>
+      <iconify-icon
+        icon="material-symbols:arrow-back-ios-rounded"
+        style="color: black"
+        width="18"
+        height="18"
+        class="arrow-icon"
+      ></iconify-icon>
     </div>
+    <ul
+      id="edit-status-dropdown"
+      class="status-dropdown white-background hide"
+    >
+      <li>
+        <input
+          type="radio"
+          id="edit-to-do-radio"
+          name="status-option"
+          value="To do"
+          class="radio-input"
+        />
+        <label for="edit-to-do-radio" class="radio-label">
+          <span class="circle pink-background"></span><span>To do</span>
+        </label>
+      </li>
+      <li>
+        <!-- THE FOR ATR SHOULD = THE ID -->
+        <input
+          type="radio"
+          id="edit-doing-radio"
+          name="status-option"
+          value="Doing"
+          class="radio-input"
+        />
+        <label for="edit-doing-radio" class="radio-label">
+          <span class="circle blue-background"></span><span>Doing</span>
+        </label>
+      </li>
+      <li>
+        <input
+          type="radio"
+          id="edit-done-radio"
+          name="status-option"
+          value="Done"
+          class="radio-input"
+        />
+        <label for="edit-done-radio" class="radio-label">
+          <span class="circle green-background"></span><span>Done</span>
+        </label>
+      </li>
+    </ul>
 
 
     <!-- Control Buttonsssssssssssssssssssssssssssss -->
@@ -407,7 +448,7 @@
     <!-- js -->
     <script src="../js/main.js"></script>
     <script src="../js/node1.js"></script>
-    <script src="../js/Edit_task.js"></script>
+    
     <script src="../js/script.js"></script>
   </body>
 </html>
