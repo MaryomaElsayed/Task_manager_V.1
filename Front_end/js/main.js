@@ -15,6 +15,7 @@ const addTaskForm = document.querySelector("#set-task-overlay .form");
 const viewTaskOverlay = document.getElementById("view-task-overlay");
 const deleteTaskCTA = document.getElementById("delete-task-cta");
 const notification = document.getElementById("notification");
+const signOutButton = document.getElementById('sign-out-button');
 
 const editStatusSelect = document.getElementById('edit-status-select');
 const editStatusDropdown = document.getElementById('edit-status-dropdown');
@@ -90,7 +91,22 @@ async function fetchTasksAndRender() {
     }
 }
 
-// Event Listeners
+// EVENT LISTENERS
+
+
+if (signOutButton) {
+    signOutButton.addEventListener('click', (event) => {
+        // IMPORTANT FUNC SO THE PAGE DOES NOT RELOAD AUTOMATICALY
+        event.preventDefault(); 
+
+        //clear any user-specific data stored in localStorage or sessionStorage
+        localStorage.removeItem('user_id');
+
+        // Redirect to the login page
+        window.location.href = '/login.html'; // Update with the correct path to your login page
+    });
+}
+
 
 // Toggle the visibility of the status dropdown when the status select is clicked
 editStatusSelect.addEventListener('click', function () {
