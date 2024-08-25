@@ -1,454 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Task Management System - Dashboard</title>
-    <!-- google font: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto+Mono:wght@700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- main css -->
-    <link rel="stylesheet" href="../css/main.css" />
-    <link rel="stylesheet" href="../css/dashboard.css" />
-    
-    <link rel="stylesheet" href="../css/style.css" />
-  </head>
-  <body>
-    <!-- Because body has height 100%, we need a container to wrap the individual 
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Management System - Dashboard</title>
+  <!-- google font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto+Mono:wght@700&display=swap"
+    rel="stylesheet" />
+  <!-- main css -->
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+  <!-- Because body has height 100%, we need a container to wrap the individual 
     elements. The purpose is to add top & bottom padding -->
-    <div class="content-container">
-      <!-- success notification -->
-      <div id="notification" class="notification green-background">
-        <iconify-icon
-          icon="mdi:check-circle-outline"
-          style="color: black"
-          width="24"
-          height="24"
-        ></iconify-icon>
-        <p>The task was Added</p>
-      </div>
-      <!-- header -->
-      <div class="max-width-container">
-        <div class="header flex items-center justify-between">
-          <h1 class="title" id="display_name">user_name tasks</h1><!-- js will replace the user_name with the user name tasks-->
-          <div class="buttons-container">
-            <!-- ya laaaahwyyyyyyyy -->
-            <button
-              id="add-task-cta"
-              class="button regular-button blue-background"
-            >
-              Add task
-            </button>
-            <button class="sign-out-cta">Sign out</button>
-          </div>
-        </div>
-      </div>
-      <!-- radio buttons 11111111111111111111111111111111111 -->
-      <div class="radio-buttons-container">
-        <div class="max-width-container flex">
-          <div class="radio-container">
-            <input
-              type="radio"
-              id="list"
-              name="view-option"
-              value="list"
-              class="radio-input"
-              checked
-            />
-            <label for="list" class="radio-label">
-              <!-- list-bulleted -->
-              <iconify-icon
-                icon="material-symbols:format-list-bulleted-rounded"
-                style="color: black"
-                width="24"
-                height="24"
-              ></iconify-icon>
-              <span>Timer</span>
-            </label>
-          </div>
-          <!-- 222222222222222222222222222222222222222222222222 -->
-          <div class="radio-container">
-            <input
-              type="radio"
-              id="board"
-              name="view-option"
-              value="board"
-              class="radio-input"
-            />
-            <label for="board" class="radio-label">
-              <!-- grid -->
-              <iconify-icon
-                icon="ic:round-grid-view"
-                style="color: black"
-                width="24"
-                height="24"
-              ></iconify-icon>
-              <span>Board</span>
-            </label>
-          </div>
-          <!-- 333333333333333333333333333333333333333333333333333 -->
-          
-          <!-- 4444444444444444444444444444444444444444444444444 -->
-        </div>
-      </div>
-      <!-- tasks -->
-      <div class="max-width-container">
-        <!-- list view -->
-        <div id="list-view" class="list-view">
-          <div class="containerr">
-      <div class="timer-display">00:00:00:000</div>
-      <div class="timer-buttons-container">
-        <button id="pause-timer">Pause</button>
-        <button id="start-timer">Start</button>
-        <button id="reset-timer">Reset</button>
-      </div>
+
+
+
+  <!-- ##### Main-Content ##### -->
+  <div class="content-container">
+    <!-- success notification -->
+    <div id="notification" class="notification green-background">
+      <iconify-icon icon="mdi:check-circle-outline" style="color: black" width="24"
+        height="24"></iconify-icon>
+      <p>The task was Added</p>
     </div>
-          
-          
-        </div>
-         <!------------------------------------------------------------------>
-        <!-- board view -->
-        <div id="board-view" class="board-view hide">
-          <!-- list -->
-          <div>
-            <h2 class="list-header">
-              <span class="circle pink-background"></span
-              ><span class="text">To do</span>
-            </h2>
-            <ul class="tasks-list pink">
-              <!-- the tasks will be heeeere in a listtttt -->
-    
-            </ul>
-             <!----------------------------------------------------------------------------->
-          </div>
-          <!-- list -->
-          <div>
-            <h2 class="list-header">
-              <span class="circle blue-background"></span
-              ><span class="text">Doing</span>
-            </h2>
-            <ul class="tasks-list blue">
-              <!-- the tasks will be heeeere in a listtttt -->
-              
-            </ul>
-             <!--------------------------------------------------------------------------------->
-          </div>
-          <!-- list -->
-          <div>
-            <h2 class="list-header">
-              <span class="circle green-background"></span
-              ><span class="text">Done</span>
-            </h2>
-            <ul class="tasks-list green">
-              
-              <!-- the tasks will be heeeere in a listtttt -->
-            </ul>
-          </div>
+
+    <!-- ### Header ### -->
+    <div class="max-width-container">
+      <div class="header flex items-center justify-between">
+        <h1 class="title" id="display_name">user_name tasks</h1>
+        <!-- js will replace the user_name with the user name tasks-->
+        <div class="buttons-container">
+          <!-- ya laaaahwyyyyyyyy -->
+          <button id="add-task-cta" class="button regular-button blue-background">
+            Add task
+          </button>
+          <button class="sign-out-cta">Sign out</button>
         </div>
       </div>
     </div>
-    <!-- ya laaaaaahwyyyyy 7ad el7a2nyyyyyyy -->
-    <!-- add + update task -->
-    <div id="set-task-overlay" class="overlay set-task-overlay hide">
-      <div class="overlay-content pink-background">
+
+    <!-- ### Navbar ### -->
+    <div class="radio-buttons-container">
+      <div class="max-width-container flex">
+        <!-- radio buttons 11111111111111111111111111111111111 (Timer) -->
+        <div class="radio-container">
+          <input type="radio" id="list" name="view-option" value="list" class="radio-input"
+            checked />
+          <label for="list" class="radio-label">
+            <!-- list-bulleted -->
+            <iconify-icon icon="material-symbols:format-list-bulleted-rounded" style="color: black"
+              width="24" height="24"></iconify-icon>
+            <span>Timer</span>
+          </label>
+        </div>
+
+        <!-- 222222222222222222222222222222222222222222222222 (Board) -->
+        <div class="radio-container">
+          <input type="radio" id="board" name="view-option" value="board" class="radio-input" />
+          <label for="board" class="radio-label">
+            <!-- grid -->
+            <iconify-icon icon="ic:round-grid-view" style="color: black" width="24"
+              height="24"></iconify-icon>
+            <span>Board</span>
+          </label>
+        </div>
+        <!-- Add new features buttons to the navbar (will be here) -->
+        <!-- 333333333333333333333333333333333333333333333333333 -->
+        <!-- 444444444444444444444444444444444444444444444444444 -->
+      </div>
+    </div>
+
+    <!-- ### Views and Features ### -->
+    <div class="max-width-container">
+      <!-- Timer view -->
+      <div id="list-view" class="list-view">
+        <div class="containerr">
+          <div class="timer-display">00:00:00:000</div>
+          <div class="timer-buttons-container">
+            <button id="pause-timer">Pause</button>
+            <button id="start-timer">Start</button>
+            <button id="reset-timer">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Board view -->
+      <div id="board-view" class="board-view hide">
+        <!-- (ToDo) -->
+        <div>
+          <h2 class="list-header">
+            <span class="circle pink-background"></span>
+            <span class="text">To do</span>
+          </h2>
+          <ul class="tasks-list pink">
+            <!-- the tasks will be heeeere in a listtttt -->
+          </ul>
+        </div>
+
+        <!-- (Doing) -->
+        <div>
+          <h2 class="list-header">
+            <span class="circle blue-background"></span>
+            <span class="text">Doing</span>
+          </h2>
+          <ul class="tasks-list blue">
+            <!-- the tasks will be heeeere in a listtttt -->
+          </ul>
+        </div>
+
+        <!-- (Done) -->
+        <div>
+          <h2 class="list-header">
+            <span class="circle green-background"></span>
+            <span class="text">Done</span>
+          </h2>
+          <ul class="tasks-list green">
+            <!-- the tasks will be heeeere in a listtttt -->
+          </ul>
+        </div>
+      </div> <!-- End of board view -->
+    </div> <!-- End of views -->
+  </div> <!-- End of main content -->
+
+
+
+  <!-- ##### Create new task ##### -->
+  <div id="set-task-overlay" class="overlay set-task-overlay hide">
+    <div class="overlay-content pink-background">
+      <!-- close button -->
+      <button
+        class="button circle-button blue-background flex justify-center items-center close-button">
+        <iconify-icon icon="material-symbols:close-rounded" style="color: black" width="26"
+          height="26"></iconify-icon>
+      </button>
+      <h1 class="header">Add task</h1>
+      <form class="form" autocomplete="off">
+        <label for="name" class="label">Name</label>
+        <input type="text" name="name" id="name" class="input white-background" required />
+        <!-- Hidden input for the name fielddddddddddddddddd -->
+        <!--<input type="hidden" id="name-hidden-input">-->
+
+        <label for="description" class="label">Description</label>
+        <textarea name="description" id="description" rows="8"
+          class="textarea-input white-background" required></textarea>
+
+        <!-- CHANGED THE DATA TYPE IN DUE DATE FIELDS FROM "STRING" TO "NUMBER" -->
+        <!-- ADDED MIN AND MAX TO THE DATE FIELD TO MAKE SURE THE ENTERED VALUES ARE VALID -->
+
+        <h2 class="label">Due date</h2>
+        <div class="divided-inputs-container">
+          <div>
+            <label for="due-date-day" class="secondary-label">Day</label>
+            <input type="number" name="due-date-day" id="due-date-day"
+              class="input white-background" required min="1" max="31" />
+          </div>
+          <div>
+            <label for="due-date-month" class="secondary-label">Month</label>
+            <input type="number" name="due-date-month" id="due-date-month"
+              class="input white-background" required min="1" max="12" />
+          </div>
+          <div>
+            <label for="due-date-year" class="secondary-label">Year</label>
+            <input type="number" name="due-date-year" id="due-date-year"
+              class="input white-background" required min="1900" max="2300" />
+          </div>
+        </div>
+        <h2 class="label">Status</h2>
+        <div id="status-select"
+          class="status-select white-background flex items-center justify-between cursor-pointer">
+          <input type="hidden" id="status-input" value="To do" />
+          <span id="status-display">To do</span>
+          <iconify-icon icon="material-symbols:arrow-back-ios-rounded" style="color: black"
+            width="18" height="18" class="arrow-icon"></iconify-icon>
+        </div>
+        <ul id="status-dropdown" class="status-dropdown white-background hide">
+          <li>
+            <input type="radio" id="to-do-radio" name="status-option" value="To do"
+              class="radio-input" />
+            <label for="to-do-radio" class="radio-label">
+              <span class="circle pink-background"></span><span>To do</span>
+            </label>
+          </li>
+          <li>
+            <input type="radio" id="doing-radio" name="status-option" value="Doing"
+              class="radio-input" />
+            <label for="doing-radio" class="radio-label">
+              <span class="circle blue-background"></span><span>Doing</span>
+            </label>
+          </li>
+          <li>
+            <input type="radio" id="done-radio" name="status-option" value="Done"
+              class="radio-input" />
+            <label for="done-radio" class="radio-label">
+              <span class="circle green-background"></span><span>Done</span>
+            </label>
+          </li>
+        </ul>
+
+        <div class="text-center">
+          <button type="submit" class="button regular-button green-background cta-button">
+            Add task
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ##### Edit on task ##### -->
+  <div id="view-task-overlay" class="overlay view-task-overlay hide">
+    <div class="overlay-content green-background">
+      <form id="edit-task-form">
         <!-- close button -->
         <button
-          class="button circle-button blue-background flex justify-center items-center close-button"
-        >
-          <iconify-icon
-            icon="material-symbols:close-rounded"
-            style="color: black"
-            width="26"
-            height="26"
-          ></iconify-icon>
+          class="button circle-button blue-background flex justify-center items-center close-button">
+          <iconify-icon icon="material-symbols:close-rounded" style="color: black" width="26"
+            height="26"></iconify-icon>
         </button>
-        <h1 class="header">Add task</h1>
-        <form class="form" autocomplete="off">
-          <label for="name" class="label">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            class="input white-background"
-            required
-          />
-          <!-- Hidden input for the name fielddddddddddddddddd -->
-          <!--<input type="hidden" id="name-hidden-input">-->
 
-          <label for="description" class="label">Description</label>
-          <textarea
-            name="description"
-            id="description"
-            rows="8"
-            class="textarea-input white-background"
-            required
-          ></textarea>
 
-          <!-- CHANGED THE DATA TYPE IN DUE DATE FIELDS FROM "STRING" TO "NUMBER" -->
-          <!-- ADDED MIN AND MAX TO THE DATE FIELD TO MAKE SURE THE ENTERED VALUES ARE VALID -->
-          
-          <h2 class="label">Due date</h2>
-          <div class="divided-inputs-container">
-            <div>
-              <label for="due-date-day" class="secondary-label">Day</label>
-              <input
-                type="number"
-                name="due-date-day"
-                id="due-date-day"
-                class="input white-background"
-                required
-                min="1" max="31"
-              />
-            </div>
-            <div>
-              <label for="due-date-month" class="secondary-label">Month</label>
-              <input
-                type="number"
-                name="due-date-month"
-                id="due-date-month"
-                class="input white-background"
-                required
-                min="1" max="12"
-              />
-            </div>
-            <div>
-              <label for="due-date-year" class="secondary-label">Year</label>
-              <input
-                type="number"
-                name="due-date-year"
-                id="due-date-year"
-                class="input white-background"
-                required
-                min="1900" max="2300"
-              />
-            </div>
-          </div>
-          <h2 class="label">Status</h2>
-<div
-  id="status-select"
-  class="status-select white-background flex items-center justify-between cursor-pointer"
->
-  <input type="hidden" id="status-input" value="To do" />
-  <span id="status-display">To do</span>
-  <iconify-icon
-    icon="material-symbols:arrow-back-ios-rounded"
-    style="color: black"
-    width="18"
-    height="18"
-    class="arrow-icon"
-  ></iconify-icon>
-</div>
-<ul
-  id="status-dropdown"
-  class="status-dropdown white-background hide"
->
-  <li>
-    <input
-      type="radio"
-      id="to-do-radio"
-      name="status-option"
-      value="To do"
-      class="radio-input"
-    />
-    <label for="to-do-radio" class="radio-label">
-      <span class="circle pink-background"></span><span>To do</span>
-    </label>
-  </li>
-  <li>
-    <input
-      type="radio"
-      id="doing-radio"
-      name="status-option"
-      value="Doing"
-      class="radio-input"
-    />
-    <label for="doing-radio" class="radio-label">
-      <span class="circle blue-background"></span><span>Doing</span>
-    </label>
-  </li>
-  <li>
-    <input
-      type="radio"
-      id="done-radio"
-      name="status-option"
-      value="Done"
-      class="radio-input"
-    />
-    <label for="done-radio" class="radio-label">
-      <span class="circle green-background"></span><span>Done</span>
-    </label>
-  </li>
-</ul>
+        <!-- Task Name -->
+        <h1 class="header no-margin">Name</h1>
+        <!--<p class="value" id="task_name"></p>-->
+        <input type="text" name="name" id="edit-task-name" class="input white-background"
+          placeholder="Task Name">
 
-          <div class="text-center">
-            <button
-              type="submit"
-              class="button regular-button green-background cta-button"
-            >
-              Add task
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-    <!---------------------------------------------------->
-    <!-- view taskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk -->
-    <div id="view-task-overlay" class="overlay view-task-overlay hide">
-  <div class="overlay-content green-background">
-    <form id="edit-task-form">
-    <!-- close button -->
-    <button class="button circle-button blue-background flex justify-center items-center close-button">
-      <iconify-icon
-        icon="material-symbols:close-rounded"
-        style="color: black"
-        width="26"
-        height="26"
-      ></iconify-icon>
-    </button>
-    
+        <!-- Task Description -->
 
-    <!-- Task Name -->
-    <h1 class="header no-margin">Name</h1>
-    <!--<p class="value" id="task_name"></p>-->
-    <input type="text" name="name" id="edit-task-name" class="input white-background" placeholder="Task Name">
-
-    <!-- Task Description -->
-
-    <h1 class="header">Description</h1>
-   <!--  <p class="value" id="task_description">
+        <h1 class="header">Description</h1>
+        <!--  <p class="value" id="task_description">
      
     </p> -->
-     <textarea id="edit-task-description" class="input white-background"  placeholder="Task Description"></textarea>
+        <textarea id="edit-task-description" class="input white-background"
+          placeholder="Task Description"></textarea>
 
-    <div id="task_due_date" class="divided-inputs-container">
-        <div>
-            <label for="due-date-day" class="secondary-label" >Day</label>
-            <input type="number" id="edit-due-date-day" class="input white-background"  placeholder="Day" required min="1" max="31">
-        </div>
-        <div>
+        <div id="task_due_date" class="divided-inputs-container">
+          <div>
+            <label for="due-date-day" class="secondary-label">Day</label>
+            <input type="number" id="edit-due-date-day" class="input white-background"
+              placeholder="Day" required min="1" max="31">
+          </div>
+          <div>
             <label for="due-date-month" class="secondary-label">Month</label>
-            <input type="number" id="edit-due-date-month" class="input white-background" placeholder="Month" required min="1" max="12">
-        </div>
-        <div>
+            <input type="number" id="edit-due-date-month" class="input white-background"
+              placeholder="Month" required min="1" max="12">
+          </div>
+          <div>
             <label for="due-date-year" class="secondary-label">Year</label>
-            <input type="number" id="edit-due-date-year" class="input white-background" placeholder="Year" required min="1900" max="2100">
+            <input type="number" id="edit-due-date-year" class="input white-background"
+              placeholder="Year" required min="1900" max="2100">
+          </div>
         </div>
-    </div>
 
 
-    <!-- Task Status -->
-    <!-- <div class="flex items-center">
+        <!-- Task Status -->
+        <!-- <div class="flex items-center">
       <h1 class="header min-width">Status</h1>
       <p class="value status-value" id="task_status">
         <span class="circle blue-background"></span><span>Doing</span>
       </p>
     </div> -->
-     <!-- Status Selection -->
-    <label class="secondary-label">Status</label>
-    <div
-      id="edit-status-select"
-      class="status-select white-background flex items-center justify-between cursor-pointer"
-    >
-      <input type="hidden" id="edit-status-input" value="To do" />
-      <span id="edit-status-display">To do</span>
-      <iconify-icon
-        icon="material-symbols:arrow-back-ios-rounded"
-        style="color: black"
-        width="18"
-        height="18"
-        class="arrow-icon"
-      ></iconify-icon>
-    </div>
-    <ul
-      id="edit-status-dropdown"
-      class="status-dropdown white-background hide"
-    >
-      <li>
-        <input
-          type="radio"
-          id="edit-to-do-radio"
-          name="status-option"
-          value="To do"
-          class="radio-input"
-        />
-        <label for="edit-to-do-radio" class="radio-label">
-          <span class="circle pink-background"></span><span>To do</span>
-        </label>
-      </li>
-      <li>
-        <!-- THE FOR ATR SHOULD = THE ID -->
-        <input
-          type="radio"
-          id="edit-doing-radio"
-          name="status-option"
-          value="Doing"
-          class="radio-input"
-        />
-        <label for="edit-doing-radio" class="radio-label">
-          <span class="circle blue-background"></span><span>Doing</span>
-        </label>
-      </li>
-      <li>
-        <input
-          type="radio"
-          id="edit-done-radio"
-          name="status-option"
-          value="Done"
-          class="radio-input"
-        />
-        <label for="edit-done-radio" class="radio-label">
-          <span class="circle green-background"></span><span>Done</span>
-        </label>
-      </li>
-    </ul>
+        <!-- Status Selection -->
+        <label class="secondary-label">Status</label>
+        <div id="edit-status-select"
+          class="status-select white-background flex items-center justify-between cursor-pointer">
+          <input type="hidden" id="edit-status-input" value="To do" />
+          <span id="edit-status-display">To do</span>
+          <iconify-icon icon="material-symbols:arrow-back-ios-rounded" style="color: black"
+            width="18" height="18" class="arrow-icon"></iconify-icon>
+        </div>
+        <ul id="edit-status-dropdown" class="status-dropdown white-background hide">
+          <li>
+            <input type="radio" id="edit-to-do-radio" name="status-option" value="To do"
+              class="radio-input" />
+            <label for="edit-to-do-radio" class="radio-label">
+              <span class="circle pink-background"></span><span>To do</span>
+            </label>
+          </li>
+          <li>
+            <!-- THE FOR ATR SHOULD = THE ID -->
+            <input type="radio" id="edit-doing-radio" name="status-option" value="Doing"
+              class="radio-input" />
+            <label for="edit-doing-radio" class="radio-label">
+              <span class="circle blue-background"></span><span>Doing</span>
+            </label>
+          </li>
+          <li>
+            <input type="radio" id="edit-done-radio" name="status-option" value="Done"
+              class="radio-input" />
+            <label for="edit-done-radio" class="radio-label">
+              <span class="circle green-background"></span><span>Done</span>
+            </label>
+          </li>
+        </ul>
 
 
-    <!-- Control Buttonsssssssssssssssssssssssssssss -->
-    <div class="control-buttons-container">
-      <!-- edit button -->
-      <button
-        class="button circle-button pink-background flex justify-center items-center" id="edit_button"
-      >
-        <iconify-icon
-          icon="material-symbols:edit-rounded"
-          style="color: black"
-          width="24"
-          height="24"
-        ></iconify-icon>
-      </button>
+        <!-- Control Buttonsssssssssssssssssssssssssssss -->
+        <div class="control-buttons-container">
+          <!-- edit button -->
+          <button class="button circle-button pink-background flex justify-center items-center"
+            id="edit_button">
+            <iconify-icon icon="material-symbols:edit-rounded" style="color: black" width="24"
+              height="24"></iconify-icon>
+          </button>
 
 
-      <!-- delete button -->
-      <button
-        id="delete-task-cta"
-        class="button circle-button pink-background flex justify-center items-center"
-      >
-        <iconify-icon
-          icon="ic:round-delete"
-          style="color: black"
-          width="24"
-          height="24"
-        ></iconify-icon>
-      </button>
+          <!-- delete button -->
+          <button id="delete-task-cta"
+            class="button circle-button pink-background flex justify-center items-center">
+            <iconify-icon icon="ic:round-delete" style="color: black" width="24"
+              height="24"></iconify-icon>
+          </button>
+        </div>
     </div>
   </div>
-</div>
 
-    <!-- import IconifyIcon web component -->
-    <script src="https://code.iconify.design/iconify-icon/1.0.5/iconify-icon.min.js"></script>
-    <!-- js -->
-    <script src="../js/main.js"></script>
-    <script src="../js/node1.js"></script>
-    
-    <script src="../js/script.js"></script>
-  </body>
+  <!-- import IconifyIcon web component -->
+  <script src="https://code.iconify.design/iconify-icon/1.0.5/iconify-icon.min.js"></script>
+  <!-- js -->
+  <script src="../js/main.js"></script>
+  <script src="../js/node1.js"></script>
+  <script src="../js/script.js"></script>
+</body>
+
 </html>
