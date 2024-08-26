@@ -1,0 +1,3 @@
+# Complete dark/light mode button
+# Handle navbar
+# Pick colors
