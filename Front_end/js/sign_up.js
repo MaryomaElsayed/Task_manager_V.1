@@ -6,11 +6,6 @@ class User {
     this.email = email;
     this.password = password;
   }
-
-  // Method to return user details (excluding password for security)
-  getDetails() {
-    return `First Name: ${this.first_name}, Last Name: ${this.last_name}, Email: ${this.email}`;
-  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -44,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Store the first name and user_id in local storage
           localStorage.setItem("first_name", data.first_name);
-          localStorage.setItem("user_id", data.user_id);
+          localStorage.setItem("user_id", data._id); // Use data._id instead of data.user_id
 
           // Redirect to the dashboard page
           window.location.href = "/dashboard.html";
@@ -57,3 +52,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+

@@ -2,7 +2,11 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
-const mongooseSequence = require('mongoose-sequence')(mongoose); // Import mongoose-sequence
+// Hashing passwords
+// Download this ya abdoooooo
+const bcrypt = require('bcrypt');
+const User = require('./models/User');
+
 const port = 4000;
 
 // Import ObjectId from mongoose.Types
@@ -32,40 +36,37 @@ app.get('/dashboard.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'Front_end', 'pages', 'dashboard.html'));
 });
 
+
+
 // Connect to MongoDB local
 const mongoURI = 'mongodb://localhost:27017/new_task_manager';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Define Task Schema
-const taskSchema = new mongoose.Schema({
-    name: String,
-    description: String,
-    day: String,
-    month: String,
-    year: String,
-    status: String,
-    added_date: { type: Date, default: Date.now },
-    updated_date: { type: Date, default: Date.now }
+// Disable bcrypt compare for testing purposes
+app.post('/api/signin', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Find the user by email
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Directly compare passwords (not recommended for production)
+        if (user.password !== password) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Respond with the user's ID and other necessary details
+        res.json({ userId: user._id, email: user.email, name: user.name });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
 });
-
-// Define User Schema with auto-increment plugin
-const userSchema = new mongoose.Schema({
-    user_id: { type: Number, unique: true },
-    first_name: String,
-    last_name: String,
-    email: { type: String, unique: true },
-    password: String,
-    tasks: [taskSchema] // Embed Task Schema
-});
-
-// Add auto-increment plugin
-userSchema.plugin(mongooseSequence, { inc_field: 'user_id' });
-
-
-// Create User Model
-const User = mongoose.model('User', userSchema);
 
 app.post('/api/users', async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
@@ -73,18 +74,16 @@ app.post('/api/users', async (req, res) => {
         return res.status(400).send('Missing required fields');
     }
     try {
-        const newUser = new User({ first_name, last_name, email, password, tasks: [] });
+        const newUser = new User({
+            first_name,
+            last_name,
+            email,
+            password, // Note: Hashing password is recommended
+            tasks: [],
+            _id: new ObjectId() // Ensure an ObjectId is set if required
+        });
         await newUser.save();
         res.status(201).json(newUser);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
-});
-
-app.get('/api/users', async (req, res) => {
-    try {
-        const users = await User.find({}, 'user_id first_name last_name email tasks');
-        res.json(users);
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -102,7 +101,9 @@ app.post('/api/users/:userId/tasks', async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ user_id: userId });
+        // Convert the userId to an ObjectId
+        const user = await User.findOne({ _id: new ObjectId(userId) });
+
         if (!user) {
             return res.status(404).send('User not found');
         }
@@ -116,25 +117,34 @@ app.post('/api/users/:userId/tasks', async (req, res) => {
     }
 });
 
+
 app.get('/api/users/:userId/tasks', async (req, res) => {
     try {
-        const userId = Number(req.params.userId); // Convert to number
-        const user = await User.findOne({ user_id: userId });
+        const userId = req.params.userId;
+
+        // Correctly instantiate ObjectId with the 'new' keyword
+        const user = await User.findOne({ _id: new mongoose.Types.ObjectId(userId) });
+
         if (!user) {
             return res.status(404).send('User not found');
         }
+
         res.json(user.tasks);
     } catch (err) {
+        console.error('Server error:', err);
         res.status(500).send(err.message);
     }
 });
 
+
+
 app.get('/api/users/:userId/tasks/:taskId', async (req, res) => {
     try {
-        const userId = Number(req.params.userId);
+        const userId = new ObjectId(req.params.userId); // Convert userId to ObjectId
         const taskId = new ObjectId(req.params.taskId); // Convert taskId to ObjectId
 
-        const user = await User.findOne({ user_id: userId, 'tasks._id': taskId }, { 'tasks.$': 1 });
+        // Find the user by ObjectId and look for the task with the matching taskId
+        const user = await User.findOne({ _id: userId, 'tasks._id': taskId }, { 'tasks.$': 1 });
         if (!user) {
             return res.status(404).send('Task not found');
         }
@@ -155,23 +165,26 @@ app.get('/api/users/:userId/tasks/:taskId', async (req, res) => {
 
 
 
-//Update the taaaaaaske
 
+//Update the taaaaaaske
 app.put('/api/users/:userId/tasks/:taskId', async (req, res) => {
     const { userId, taskId } = req.params;
     const { name, description, day, month, year, status } = req.body;
 
     try {
-        const user = await User.findOne({ user_id: Number(userId) });
+        // Convert userId to ObjectId
+        const user = await User.findOne({ _id: new ObjectId(userId) });
         if (!user) {
             return res.status(404).send('User not found');
         }
 
-        const task = user.tasks.id(taskId);
+        // Find the task by taskId (ObjectId)
+        const task = user.tasks.id(new ObjectId(taskId));
         if (!task) {
             return res.status(404).send('Task not found');
         }
 
+        // Update task details
         task.name = name || task.name;
         task.description = description || task.description;
         task.day = day || task.day;
@@ -189,6 +202,7 @@ app.put('/api/users/:userId/tasks/:taskId', async (req, res) => {
 });
 
 
+
 app.delete('/api/users/:userId/tasks/:taskId', async (req, res) => {
     const { userId, taskId } = req.params;
 
@@ -197,19 +211,20 @@ app.delete('/api/users/:userId/tasks/:taskId', async (req, res) => {
     }
 
     try {
-        // Find the user by user_id
-        const user = await User.findOne({ user_id: Number(userId) });
+        // Convert userId to ObjectId
+        const user = await User.findOne({ _id: new ObjectId(userId) });
         if (!user) {
             return res.status(404).send('User not found');
         }
 
-        // Remove the task using pull
-        const task = user.tasks.id(taskId);
+        // Find the task by taskId (ObjectId)
+        const task = user.tasks.id(new ObjectId(taskId));
         if (!task) {
             return res.status(404).send('Task not found');
         }
 
-        user.tasks.pull(taskId);  // Use pull to remove the task
+        // Remove the task using pull
+        user.tasks.pull(new ObjectId(taskId));  // Use pull to remove the task by ObjectId
         await user.save();
 
         res.status(204).send();

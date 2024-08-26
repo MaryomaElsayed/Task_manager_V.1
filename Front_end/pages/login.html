@@ -23,21 +23,24 @@
         class="left-column flex flex-column height-full justify-center items-center"
       >
         <h1 class="welcoming-title">Welcome back</h1>
-        <form class="form" autocomplete="off">
+        <!-- added id to the form -->
+        <form class="form"  id="sign-in-form"  autocomplete="off">
           <label for="email" class="label">Email</label>
-          <input type="email" name="email" id="email" class="input" required />
+          <input type="email" name="email" id="login-email" class="input" placeholder="Email" required />
 
           <label for="password" class="label">Password</label>
           <input
             type="password"
             name="password"
-            id="password"
+            id="login-password"
+            placeholder="Password"
             class="input"
             required
           />
 
           <button
             type="submit"
+            id = "login-submit-button"
             class="button regular-button pink-background cta-btn"
           >
             Log in
@@ -51,5 +54,6 @@
       <!-- right side -->
       <div class="right-column"></div>
     </div>
+    <script src="../js/login.js"></script>
   </body>
 </html>

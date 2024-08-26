@@ -97,10 +97,7 @@ async function fetchTasksAndRender() {
 if (signOutButton) {
     signOutButton.addEventListener('click', (event) => {
         // IMPORTANT FUNC SO THE PAGE DOES NOT RELOAD AUTOMATICALY
-        event.preventDefault(); 
-
-        //clear any user-specific data stored in localStorage or sessionStorage
-        localStorage.removeItem('user_id');
+        event.preventDefault();
 
         // Redirect to the login page
         window.location.href = '/login.html'; // Update with the correct path to your login page
@@ -186,6 +183,7 @@ statusRadios.forEach((radio) => {
     }
   });
 });
+
 
 // Add Task Form
 addTaskForm.addEventListener("submit", async (event) => {
@@ -365,16 +363,6 @@ document.addEventListener("click", (event) => {
     }
 });
 
-// // Event listener for the "Edit" button
-// document.getElementById("edit_button").addEventListener("click", (event) => {
-//     const taskId = document.getElementById('view-task-overlay').getAttribute('data-task-id');
-//     if (taskId) {
-//         updateTask(taskId); // Send PUT request to update task
-//     } else {
-//         console.error("Task ID is missing, cannot update task.");
-//     }
-// });
-
 
 // Event listener for the "Edit" button
 document.getElementById("edit_button").addEventListener("click", (event) => {
@@ -491,6 +479,16 @@ function displayTask(task) {
     console.error('Error:', error);
   }
 })();
+
+
+
+
+
+
+
+
+
+
 
 
 
