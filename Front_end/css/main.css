@@ -50,7 +50,29 @@ img {
   --pink: #ff9c9c;
   --green: #abe5bc;
   --beige: #fffaf0;
-  --white: #fff;
+  --white: white;
+
+  /* darkmode colors */
+  --dark-1: rgb(34, 40, 49);
+  --dark-2: #9698a2;
+  --dark-3: #225266;
+  --dark-timer-green: #496d54;
+  --dark-timer-blue: #1e4c82;
+
+  /* lightmode colors */
+  --light-1: #fafafa;
+  --light-2: #f1f1f6;
+  --light-3: #58ced4;
+  --light-timer-green: #abe5bc;
+  --light-timer-blue: #7a9ed7;
+
+  /* dark/lightmode (default colors)*/
+  --first: var(--light-1);
+  --second: var(--light-2);
+  --third: var(--light-3);
+  --font-color: var(--black);
+  --timer-color: var(--light-timer-green);
+  --timer-control-color: var(--light-timer-blue);
 
   /* shadow */
   --green-shadow: 6px 6px 0px var(--green);
@@ -81,6 +103,7 @@ body {
 
 body {
   font-family: var(--font-family);
+  background-color: var(--first);
 }
 
 .max-width-container {
@@ -196,6 +219,7 @@ body {
   width: 100%;
   padding: var(--space-16);
   margin-top: var(--space-16);
+  background-color: var(--second);
 }
 
 .input,

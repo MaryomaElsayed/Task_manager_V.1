@@ -24,18 +24,22 @@ body.overflow-hidden {
 
 /* radio buttons for view options */
 .radio-buttons-container {
-  border-top: 2px solid var(--black);
-  border-bottom: 2px solid var(--black);
+  /* border-top: 2px solid var(--black);
+  border-bottom: 2px solid var(--black); */
   margin-top: var(--space-32);
+}
+
+.curvy-border {
+  border-radius: 20px;
 }
 
 .radio-container {
   width: 100px;
-  border-left: 2px solid var(--black);
+  /* border-left: 2px solid var(--black); */
 }
 
 .radio-container:last-child {
-  border-right: 2px solid var(--black);
+  /* border-right: 2px solid var(--black); */
 }
 
 .radio-buttons-container .radio-label {
@@ -58,7 +62,8 @@ body.overflow-hidden {
 
 /* direct sibling */
 .radio-buttons-container .radio-input:checked + .radio-label {
-  background-color: var(--pink);
+  background-color: hsla(186, 0%, 54%, 0.35);
+  border-radius: 30px;
 }
 
 /* lists view */
@@ -187,7 +192,7 @@ body.overflow-hidden {
 
 .board-view .task-item {
   margin-top: var(--space-16);
-  background-color: var(--white);
+  background-color: var(--second);
   border: 2px solid var(--black);
   border-radius: var(--radius-8);
 }

@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
 
 .theme__fill,
@@ -204,5 +205,38 @@
 }
 
 :root:has(#theme:checked) {
-  --black: brown;
+  --first: var(--dark-1);
+  --second: var(--dark-2);
+  --third: var(--dark-3);
+  --font-color: var(--white);
+  --timer-color: var(--dark-timer-green);
+  --timer-control-color: var(--dark-timer-blue);
 }
+
+/* fix the sticky*/
+.theme__toggle:checked + .theme__fill {
+  /* your styles for the dark theme */
+  pointer-events: none; /* add this line */
+}
+
+/* neumorphism */
+/* .neu {
+  border-radius: 20px;
+  background: #222831;
+  box-shadow: 20px 20px 60px #1d222a, -20px -20px 60px #272e38;
+}
+
+.neu-nav {
+  border-radius: 20px;
+  background: #225266;
+  box-shadow: 20px 20px 60px #1d4657, -20px -20px 60px #275e75;
+} */
+/* glass */
+/* .gg {
+  background: rgba(208, 67, 67, 0.39);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2.8px);
+  -webkit-backdrop-filter: blur(2.8px);
+  border: 1px solid rgba(208, 67, 67, 0.22);
+} */
