@@ -31,6 +31,8 @@
             name="first_name"
             id="First_Name"
             class="input"
+            minlength="3"
+            maxlength="14"
             required
           />
 
@@ -40,11 +42,26 @@
             name="last_name"
             id="Last_Name"
             class="input"
+            minlength="3"
+            maxlength="14"
             required
           />
 
           <label for="email" class="label">Email</label>
-          <input type="email" name="email" id="email" class="input" required />
+<input
+    type="email"
+    name="email"
+    id="email"
+    class="input"
+    pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+    title="Please enter a valid Gmail address ending with @gmail.com"
+    required
+/>
+
+ <div id="emailError" class="error-message" style="display:none; color:red;"></div>
+
+
+        
 
           <label for="password" class="label">Password</label>
           <input
@@ -52,6 +69,9 @@
             name="password"
             id="password"
             class="input"
+            minlength="8"
+            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+            title="Password must be at least 8 characters long and contain both letters and numbers."
             required
           />
 
@@ -72,6 +92,42 @@
     </div>
       <script src="../js/main.js"></script>
       <script src="../js/sign_up.js"></script>
+      <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('add_User');
+    const emailInput = document.getElementById('email');
+    const emailError = document.getElementById('emailError');
+
+    // Function to show error
+    function showError(input, errorElement, message) {
+        input.classList.add('invalid');
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+
+    // Function to hide error
+    function hideError(input, errorElement) {
+        input.classList.remove('invalid');
+        errorElement.style.display = 'none';
+    }
+
+    // Email validation function
+    function isValidGmail(email) {
+        return email.toLowerCase().endsWith('@gmail.com');
+    }
+
+
+    // Email real-time validation
+    emailInput.addEventListener('input', function() {
+        const value = emailInput.value.trim();
+        if (isValidGmail(value)) {
+            hideError(emailInput, emailError);
+        } else {
+            showError(emailInput, emailError, 'Please enter a valid Gmail address ending with @gmail.com.');
+        }
+    });
+});
+</script>
 
   </body>
 </html>
