@@ -1,0 +1,64 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  
+}
+.containerr {
+  background-color: #f0f9ff;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 60%;
+  width: min(90%, 31.25em);
+  padding: 3.75em 0;
+  border-radius: 0.8em;
+  box-shadow: 6px 6px 0px #abe5bc;
+  
+}
+.timer-display {
+  position: relative;
+  width: 110%;
+  background-color: #abe5bc;
+  left: -5%;
+  padding: 1em 0;
+  font-family: "Roboto Mono", monospace;
+  color: #f0f9ff;
+  font-size: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 0.3em;
+  box-shadow: 0 0.5em 1em rgba(1, 87, 185, 0.2);
+}
+
+/* Container for the buttons */
+.timer-buttons-container {
+  display: flex;
+  justify-content: space-around; /* Space between buttons */
+  align-items: center; /* Align buttons vertically center */
+  width: 100%; /* Container takes full width */
+  margin-top: 3.8em; /* Apply margin to container instead of individual buttons */
+}
+
+/* Individual button styles */
+#start-timer, #pause-timer, #reset-timer {
+  width: 30%; /* Reduced width so buttons can fit next to each other */
+  padding: 1em 1.5em;
+  font-size: 1.12em;
+  background-color: #dbe9ff;
+  color: #3c98ff;
+  border: none;
+  font-family: "Poppins", sans-serif;
+  border-radius: 0.5em;
+  cursor: pointer;
+  outline: none;
+}
+
+#start-timer {
+  background-color: 
+#abe5bc;
+  color: #f0f9ff;
+}
