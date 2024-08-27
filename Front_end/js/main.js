@@ -411,7 +411,7 @@ deleteTaskCTA.addEventListener("click", async (event) => {
                 notification.classList.add("show");
                 setTimeout(() => {
                     notification.classList.remove("show");
-                }, 3000);
+                },0);
             } else {
                 console.error('Failed to delete task:', response.status, await response.text());
             }
