@@ -40,6 +40,7 @@
     <!-- ### Header ### -->
     <div class="max-width-container">
       <div class="header flex items-center justify-between">
+        
         <h1 class="title" id="display_name">user_name tasks</h1>
         <!-- js will replace the user_name with the user name tasks-->
         <div class="buttons-container">
@@ -66,7 +67,7 @@
             </span>
           </label>
 
-          <button class="sign-out-cta pink" id="sign-out-button">logout</button>
+          <button class="sign-out-cta pink" id="sign-out-button"><span class="pink-background" style="padding: 5px 5px; border-radius: 20px">logout</span></button>
         </div>
       </div>
     </div>
@@ -74,18 +75,6 @@
     <!-- ### Navbar ### -->
     <div class="radio-buttons-container max-width-container flex justify-center neu-nav">
       <div class="nav-background flex justify-center curvy-border neumorphism" style="width: 90%; background-color: var(--third);">
-        <!-- radio buttons 11111111111111111111111111111111111 (Timer) -->
-        <div class="radio-container">
-          <input type="radio" id="list" name="view-option" value="list" class="radio-input"
-            checked />
-          <label for="list" class="radio-label">
-            <!-- list-bulleted -->
-            <iconify-icon icon="material-symbols:format-list-bulleted-rounded" style="color: black"
-              width="24" height="24"></iconify-icon>
-            <span>Timer</span>
-          </label>
-        </div>
-
         <!-- 222222222222222222222222222222222222222222222222 (Board) -->
         <div class="radio-container">
           <input type="radio" id="board" name="view-option" value="board" class="radio-input" />
@@ -94,6 +83,17 @@
             <iconify-icon icon="ic:round-grid-view" style="color: black" width="24"
               height="24"></iconify-icon>
             <span>Board</span>
+          </label>
+        </div>
+
+        <!-- radio buttons 11111111111111111111111111111111111 (Timer) -->
+        <div class="radio-container">
+          <input type="radio" id="list" name="view-option" value="list" class="radio-input"
+            checked />
+          <label for="list" class="radio-label">
+            <!-- list-bulleted -->
+            <iconify-icon icon="ic:sharp-timer" width="24" height="24"  style="color: black"></iconify-icon>
+            <span>Timer</span>
           </label>
         </div>
         <!-- Add new features buttons to the navbar (will be here) -->
